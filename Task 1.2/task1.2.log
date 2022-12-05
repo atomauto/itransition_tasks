@@ -1,12 +1,1 @@
 Script succesfully started, virtualization is supported
-
-WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
-
-Чтение списков пакетов…
-Построение дерева зависимостей…
-Чтение информации о состоянии…
-Уже установлен пакет bridge-utils самой новой версии (1.7-1ubuntu3).
-Уже установлен пакет libvirt-clients самой новой версии (8.0.0-1ubuntu7.3).
-Уже установлен пакет libvirt-daemon-system самой новой версии (8.0.0-1ubuntu7.3).
-Уже установлен пакет qemu-system-x86 самой новой версии (1:6.2+dfsg-2ubuntu6.5).
-Обновлено 0 пакетов, установлено 0 новых пакетов, для удаления отмечено 0 пакетов, и 0 пакетов не обновлено.

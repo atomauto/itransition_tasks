@@ -2,19 +2,53 @@
 #shellcheck disable=SC2024
 logfile='task1.2.log'
 function usage() {
+    echo "Usage: $(basename $0) [-h] [-d] [-r]"
+    echo " -d, --driver <driver>           Virtualization driver for kubectl, only kvm and docker are supported, default is kvm"
+    echo " -r, --kubectl_release <release> Release version of kubectl, default is latest stable"
+    echo " -h, --help                      Show this help"
+    echo ""
     echo "This script performs actions according to its task (same filename with .md extension)"
-    echo "You must run script with root privilegies (please, use sudo)"
-    echo "If you want to install latest version of docker, specify key -f or --docker-repo"
-    echo "Some script information can be found in $logfile"
+    echo "Debug information can be found in $logfile"
 }
 
-if [[ "$1" == -h || "$1" == --help ]]; then
-    usage
-    exit 0
-fi
+# if [[ "$1" == -h || "$1" == --help ]]; then
+#     usage
+#     exit 0
+# fi
 
+#Default opts
 driver="kvm"
-#TODO make new driver argument
+kubectl_release=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+
+while :; do
+    case "$1" in
+    -d | --driver)
+        shift
+        driver="$1"
+        shift
+        ;;
+    -r | --kubect_release)
+        shift
+        kubectl_release="$1"
+        shift
+        ;;
+    -h | --help)
+        usage
+        exit 0
+        ;;
+        #   --) # End of all options
+        #   shift
+        #   break;
+        #   -*)
+        #   echo "Error: Unknown option: $1" >&2
+        #   exit 1
+        #   ;;
+    *) # No more options
+        break
+        ;;
+    esac
+done
+
 if [[ $(grep -E -c 'vmx|svm' /proc/cpuinfo) -eq 0 ]]; then
     echo "Virtualiazition isn't supported by your CPU"
     echo "Maybe, you should try to install minikube manual with 'docker' or 'none' driver"
@@ -24,8 +58,6 @@ if [[ $(grep -E -c 'vmx|svm' /proc/cpuinfo) -eq 0 ]]; then
 fi
 
 echo "Script succesfully started, virtualization is supported" >$logfile
-#TODO: custom release named param handle
-kubectl_release=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
 echo "Downloading kubectl, please wait..."
 curl -LO https://storage.googleapis.com/kubernetes-release/release/$kubectl_release/bin/linux/amd64/kubectl
 chmod +x ./kubectl
@@ -73,6 +105,7 @@ fi
 # echo "Downloading AWK server code, please wait..."
 # git clone https://github.com/kevin-albert/awkserver.git
 # rm -rf awkserver/.git/ && rm awkserver/.gitignore
+
 #Fix to use local docker image
 eval $(minikube -p minikube docker-env)
 echo "Building docker image, please wait..."
@@ -82,3 +115,6 @@ kubectl apply -f awk-deployment.yaml
 # kubectl apply -f awk-service.yaml
 #Using 8080 port on local machine to avoid security issues accessing 80 without root rights
 kubectl port-forward deployments/awk-deployment 8080:80
+
+#Need graceful shutdown
+minikube stop
