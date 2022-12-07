@@ -118,5 +118,10 @@ kubectl apply -f awk-deployment.yaml
 #Using 8080 port on local machine to avoid security issues accessing 80 without root rights
 kubectl port-forward deployments/awk-deployment 8080:80
 
+echo "Results: "
+kubectl get pods -A
+kubectl get svc
+kubectl get all
+
 #Need graceful shutdown
 minikube stop
