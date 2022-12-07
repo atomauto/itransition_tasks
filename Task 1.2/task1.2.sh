@@ -54,10 +54,12 @@ if [[ $(grep -E -c 'vmx|svm' /proc/cpuinfo) -eq 0 ]]; then
     echo "Maybe, you should try to install minikube manual with 'docker' or 'none' driver"
     echo "https://kubernetes.io/ru/docs/tasks/tools/install-minikube/"
     echo "https://minikube.sigs.k8s.io/docs/drivers/docker/"
-    exit 1
-fi
-
+    echo "Now script is switched to docker driver"
+    driver="docker"
+    echo "Script succesfully started, virtualization isn't supported, switched to docker driver" >$logfile
+else
 echo "Script succesfully started, virtualization is supported" >$logfile
+fi
 echo "Downloading kubectl, please wait..."
 curl -LO https://storage.googleapis.com/kubernetes-release/release/$kubectl_release/bin/linux/amd64/kubectl
 chmod +x ./kubectl
@@ -87,7 +89,6 @@ if [[ $driver == "kvm" ]]; then
         echo "Script supports KVM installation only for Debian and Ubuntu"
         echo "Please install on your own KVM support according to your distro doc"
         echo "Now script will be switched to 'docker' driver"
-        echo "Do you want to continue?"
         driver='docker'
     fi
 fi
@@ -110,7 +111,8 @@ fi
 eval $(minikube -p minikube docker-env)
 echo "Building docker image, please wait..."
 sudo docker build -t awk-server .
-#Предварительно надо создать namespace
+kubectl create -f awk-service-namespace.yml
+kubectl config set-context kubectl config current-context --namespace=sandbox
 kubectl apply -f awk-deployment.yaml
 # kubectl apply -f awk-service.yaml
 #Using 8080 port on local machine to avoid security issues accessing 80 without root rights
