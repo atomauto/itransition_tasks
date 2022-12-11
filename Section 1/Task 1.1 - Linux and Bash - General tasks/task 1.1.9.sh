@@ -73,7 +73,7 @@ random_name() {
 create_files() {
     for ((f = 1; f <= files; f++)); do
         random_name
-        touch "$name"
+        dd if=/dev/urandom of="$name" bs="$max_size" count=1 status=none
     done
 }
 d=1
