@@ -1,9 +1,10 @@
 #!/bin/bash
+#shellcheck disable=SC2034
 logfile=$(basename -s .sh "$0").log
 echo "Script simulates 700 dice rolls"
 ones=twos=threes=fours=fives=sixes=0
 for i in {1..700}; do
-    dice=$(($RANDOM % 6 + 1))
+    dice=$((RANDOM % 6 + 1))
     case $dice in
     1) ((ones++)) ;;
     2) ((twos++)) ;;
