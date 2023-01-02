@@ -78,17 +78,17 @@ create_files() {
 }
 d=1
 create_dirs() {
-    for ((s = 1; s <= subdirs; s++)); do
-        parent_dir=$(pwd)
-        random_name
-        mkdir "$name" && cd "$_"
-        create_files
-        if [[ $d -lt $depth ]]; then
-            ((d++))
+    if [[ $d -lt $depth ]]; then
+        ((d++))
+        for ((s = 1; s <= subdirs; s++)); do
+            parent_dir=$(pwd)
+            random_name
+            mkdir "$name" && cd "$_"
+            create_files
             create_dirs
-        fi
-        cd "$parent_dir"
-    done
+            cd "$parent_dir"
+        done
+    fi
 }
 
 create_files
