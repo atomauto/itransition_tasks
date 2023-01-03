@@ -1,0 +1,7 @@
+Vagrant.configure("2") do |config|
+    config.vm.box = "debian/bullseye64"
+    config.vm.network "forwarded_port", guest: 80, host: 8080
+    config.vm.provision "file", source: "wordpress", destination: "$HOME/wordpress"
+    config.vm.provision "file", source: "wp-config.php", destination: "$HOME/wp-config.php"
+    config.vm.provision "file", source: "nginx.conf", destination: "$HOME/nginx.conf"
+end
