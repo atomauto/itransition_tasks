@@ -45,6 +45,12 @@ server {
         location / {
                 proxy_pass http://localhost:8080/;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                set $bypass 1;
+                if ($args ~ (.*)(?:&|^)utm_source=[^&]*(.*)) {
+                  set $bypass 0;
+                }
+                proxy_no_cache $bypass;
+                proxy_cache_bypass $bypass;
         }
         location ~ /\. {
                 deny all; # запрет для скрытых файлов
