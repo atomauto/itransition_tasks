@@ -1,0 +1,28 @@
+Vagrant.configure("2") do |config|
+    
+    config.vm.define "controlnode" do |controlnode|
+        controlnode.vm.box = "debian/bullseye64"
+        controlnode.vm.hostname = "controlnode"
+        controlnode.vm.network "private_network", ip: "192.168.56.2"
+        controlnode.vm.synced_folder "./ansible","/home/vagrant/ansible"
+        controlnode.vm.provision "shell", 
+        inline: "apt update && apt install -y git && git clone https://github.com/atomauto/prepare_linux && cd prepare_linux && chmod +x debian.sh && ./debian.sh"
+    end
+
+    config.vm.define "testingserver" do |testingserver|
+        testingserver.vm.box = "debian/bullseye64"
+        testingserver.vm.hostname = "testingserver"
+        testingserver.vm.network "private_network", ip: "192.168.56.3"    
+        testingserver.vm.provision "shell", 
+        inline: "apt update && apt install -y git && git clone https://github.com/atomauto/prepare_linux && cd prepare_linux && chmod +x debian.sh && ./debian.sh"
+    end
+
+    config.vm.define "testingdbserver" do |testingserver|
+        testingserver.vm.box = "debian/bullseye64"
+        testingserver.vm.hostname = "testingserver"
+        testingserver.vm.network "private_network", ip: "192.168.56.4"    
+        testingserver.vm.provision "shell", 
+        inline: "apt update && apt install -y git && git clone https://github.com/atomauto/prepare_linux && cd prepare_linux && chmod +x debian.sh && ./debian.sh"
+    end
+
+end
