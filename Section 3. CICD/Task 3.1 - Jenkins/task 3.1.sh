@@ -27,5 +27,5 @@ vagrant ssh -c "echo \"deb http://ppa.launchpad.net/ansible/ansible/ubuntu focal
 vagrant ssh -c "sudo apt install -y gnupg && sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367 && sudo apt update && sudo apt install ansible -y" controlnode
 vagrant ssh -c "sudo cp /vagrant/etc/ansible/hosts /etc/ansible/hosts" controlnode
 vagrant ssh -c "ssh-keygen -f ~/.ssh/id_rsa -N '' && sudo cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys && sudo chmod og-wx ~/.ssh/authorized_keys" controlnode
-vagrant ssh -c "cd ansible && ansible-playbook playbook.yml" controlnode
+vagrant ssh -c "cd ansible && ansible-playbook playbook.yml && sudo usermod -aG docker jenkins" controlnode
 vagrant ssh -c "sudo cat /var/lib/jenkins/secrets/initialAdminPassword" controlnode

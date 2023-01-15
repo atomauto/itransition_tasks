@@ -9,6 +9,11 @@ Vagrant.configure("2") do |config|
         inline: "apt update && apt install -y git && git clone https://github.com/atomauto/prepare_linux && cd prepare_linux && chmod +x debian.sh && ./debian.sh"
     end
 
+    config.vm.provider "virtualbox" do |v|
+        v.memory = 1024
+        v.cpus = 4
+    end
+
     config.vm.define "testingserver" do |testingserver|
         testingserver.vm.box = "debian/bullseye64"
         testingserver.vm.hostname = "testingserver"

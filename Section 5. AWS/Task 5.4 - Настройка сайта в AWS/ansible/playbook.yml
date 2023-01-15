@@ -1,0 +1,7 @@
+- hosts: "lamp"
+  become: true
+  roles: 
+  - apache
+  - php
+  - mysql
+  - npm

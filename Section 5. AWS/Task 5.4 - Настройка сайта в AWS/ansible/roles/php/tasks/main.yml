@@ -1,0 +1,6 @@
+- name: Installing php
+  yum:
+    name:
+      - php
+      - php-mysql
+    state: latest

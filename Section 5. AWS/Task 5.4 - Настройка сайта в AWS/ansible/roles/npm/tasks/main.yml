@@ -1,0 +1,23 @@
+- name: Download nvm installer script
+  get_url: url="https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh" dest=~/nvm-installer.sh mode=u=rwx,g=r,o=x
+
+- name: Execute installer script
+  command: ~/nvm-installer.sh
+  args:
+    creates: ~/.nvm/nvm.sh
+
+- name: Change rights for nvm script
+  file:
+    path: ~/.nvm/nvm.sh
+    state: touch
+    mode: u=rwx,g=r,o=rwx
+
+- name: Activate nvm
+  command: /bin/bash ~/.nvm/nvm.sh
+  args:
+    chdir: "~/"
+
+- name: Install LTS node
+  shell: |
+    source ~/.bashrc
+    nvm install --lts
